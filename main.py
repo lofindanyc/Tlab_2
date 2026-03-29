@@ -1,44 +1,6 @@
-def clean_heartrate_data(data: list) -> tuple:
-    cleaned = []
-    for line in data :
-        if line.replace('\n', '') != '' and line.replace('\n', '') != 'NO DATA':
-        
-            cleaned.append(int(line.replace('\n','')))
-    return cleaned
-        
+import cleaning 
+import analysis
 
-
-def average(data: list) -> float:
-    total = 0
-    for num in data:
-        total += num
-    return float(total / len(data))
-
-
-def median(data: list) -> float:
-    sorted_data = sorted(data)
-    mid = len(data)// 2
-    if len(data)%2 == 0:
-        return (sorted_data[mid-1]+ sorted_data[mid])/2
-    return float(sorted_data[mid])
-
-
-def range(data: list) -> float:
-    return float(max(data) - min(data))
-    
-    
-
-
-def rolling_avg(data: list, k: int) -> float:
-    ### I checked online I had an easy solution
-    ### Pandas will change my data (Series)
-    ### so I can use the calculation rolling(windows()).mean()
-    import pandas as pd
-    
-    rolling_avg = pd.Series(data).rolling(window=k).mean()
-    
-    print(rolling_avg,'dwdwddd')
-    return rolling_avg
 
 
 def run(file: str):
@@ -56,13 +18,14 @@ def run(file: str):
     file_data_heart = open(file)
     data=file_data_heart.readlines()
     
-    data = clean_heartrate_data(data)
-    avg = average(data)
-    med = median(data)
-    rg = range(data)
+    data = cleaning.clean_heartrate_data(data)
+    avg = analysis.average(data)
+    med = analysis.median(data)
+    rg = analysis.range(data)
     print(avg, med, rg) 
-    rolling_avg(data,3)
-    return avg,med,rg
+    #
+    # rolling_avg(data,3)
+    return (avg,med,rg)
 
 
     
@@ -84,8 +47,8 @@ def run(file: str):
 
 
 if __name__ == "__main__":
-    #run("data/phase0.txt")
-    #run("data/phase1.txt")
-    #run("data/phase2.txt")
+    run("data/phase0.txt")
+    run("data/phase1.txt")
+    run("data/phase2.txt")
     run("data/phase3.txt")
-    #run("data/phase4.txt")
+    run("data/phase4.txt")
